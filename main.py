@@ -77,19 +77,15 @@ def single_page(driver, page_number, username, output, sep):
 
 def get_header_data(header_element):
     header_data_raw = header_element.find_elements(By.TAG_NAME, "a")
-    header_data = Header("", "", "None")
+    header_data = Header("", "Anonymous", "None")
+    if len(header_data_raw) == 1:
+        header_data.author = "Anonymous"
     if len(header_data_raw) > 0:
-        if "fandom" in header_data_raw[0].text.lower():
-            return
-        header_data.title = header_data_raw[0].text
-    else:
-        return
+        if "fandom" not in header_data_raw[0].text.lower():
+            header_data.title = header_data_raw[0].text
     if len(header_data_raw) > 1:
-        if "fandom" in header_data_raw[1].text.lower():
-            return
-        header_data.author = header_data_raw[1].text
-    else:
-        return
+        if "fandom" not in header_data_raw[1].text.lower():
+            header_data.author = header_data_raw[1].text
     if len(header_data_raw) > 2:
         header_data.recipient = header_data_raw[2].text
     return header_data
@@ -113,7 +109,7 @@ def get_tag_data(tag_element):
     return tag_data
 
 
-# noinspection PyPep8Naming
+
 def get_fic_metadata(fic_element):
     try:
         language = fic_element.find_elements(By.CLASS_NAME, "language")[1].text
@@ -188,6 +184,7 @@ def single_fic(fic, output, sep):
         this_fic_summary = fic.find_element(By.CLASS_NAME, "summary").text.replace("\n", "/")
     except:
         this_fic_summary = "None"
+
     this_fic = Fic(this_fic_headers, this_fic_fandoms, this_fic_tags, this_fic_metadata, this_fic_summary)
 
     with open(output, "ab") as f:
@@ -201,7 +198,6 @@ def ltostr(input_str):
 
 
 def main():
-
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument("-u", "--username", help="Provide username", required=True)
     arg_parser.add_argument("-p", "--password", help="Provide password", required=True)
@@ -217,7 +213,9 @@ def main():
     print("AO3 History Exporting...")
 
     with open(output_file, "w", encoding="utf-8") as f:
-        f.write("NameƇAuthorƇRecipientƇFandomsƇWarningsƇRelationshipsƇCharactersƇFreeform_TagsƇLanguageƇWord_CountƇLast_UpdatedƇChaptersƇFinishedƇSeriesƇKudosƇCommentsƇBookmarksƇHitsƇURLƇRatingƇPairingsƇSummary\n".replace("Ƈ", separator))
+        f.write(
+            "NameƇAuthorƇRecipientƇFandomsƇWarningsƇRelationshipsƇCharactersƇFreeform_TagsƇLanguageƇWord_CountƇLast_UpdatedƇChaptersƇFinishedƇSeriesƇKudosƇCommentsƇBookmarksƇHitsƇURLƇRatingƇPairingsƇSummary\n".replace(
+                "Ƈ", separator))
     driver = webdriver.Chrome()
     driver.get("https://archiveofourown.org/")
     driver.find_element(By.ID, "login-dropdown").click()
