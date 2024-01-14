@@ -213,9 +213,7 @@ def main():
     print("AO3 History Exporting...")
 
     with open(output_file, "w", encoding="utf-8") as f:
-        f.write(
-            "NameƇAuthorƇRecipientƇFandomsƇWarningsƇRelationshipsƇCharactersƇFreeform_TagsƇLanguageƇWord_CountƇLast_UpdatedƇChaptersƇFinishedƇSeriesƇKudosƇCommentsƇBookmarksƇHitsƇURLƇRatingƇPairingsƇSummary\n".replace(
-                "Ƈ", separator))
+        f.write("NameƇAuthorƇRecipientƇFandomsƇWarningsƇRelationshipsƇCharactersƇFreeform_TagsƇLanguageƇWord_CountƇLast_UpdatedƇChaptersƇFinishedƇSeriesƇKudosƇCommentsƇBookmarksƇHitsƇURLƇRatingƇPairingsƇSummary\n".replace("Ƈ", separator))
     driver = webdriver.Chrome()
     driver.get("https://archiveofourown.org/")
     driver.find_element(By.ID, "login-dropdown").click()
